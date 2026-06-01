@@ -14,16 +14,19 @@
     <style>
         .cursa-card { transition: all 0.2s; }
         .cursa-card:active { transform: scale(0.98); }
-        .btn-disabled { opacity: 0.3; grayscale: 1; pointer-events: none; }
+        .btn-disabled { opacity: 0.2; grayscale: 1; pointer-events: none; }
+        /* Animació per al text de propera cursa */
+        .due-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
-<body class="bg-slate-100 pb-10 font-sans">
+<body class="bg-slate-100 pb-10 font-sans text-slate-900">
 
     <div class="max-w-md mx-auto">
-        <!-- Capçalera -->
+        <!-- Capçalera modificada segons el teu codi -->
         <header class="bg-blue-600 text-white p-6 shadow-lg text-center mb-6 rounded-b-3xl">
-            <h1 class="text-2xl font-black tracking-wider text-white-300 uppercase leading-none">Copa Catalana 2026</h1>
-            <p class="text-[10px] font-bold opacity-90 uppercase tracking-[0.2em] mt-2">Cadet</p>
+            <h1 class="text-2xl font-black tracking-wider text-white uppercase leading-none">Copa Catalana 2026</h1>
+            <p class="text-[10px] font-bold opacity-90 uppercase tracking-[0.2em] mt-2 italic">Cadet</p>
             <p class="text-[10px] font-bold opacity-90 uppercase tracking-[0.2em] mt-2">ProRide Jufré Cycling Team</p>
         </header>
 
@@ -31,11 +34,18 @@
         <div id="llista-curses" class="px-4 space-y-5">
             <!-- Es genera automàticament -->
         </div>
+
+        <!-- Peu de pàgina By NeurekaLAB -->
+        <footer class="text-center py-10">
+            <a href="https://neurekalab.com" target="_blank" 
+               class="text-[10px] text-slate-400 font-medium tracking-widest uppercase italic hover:text-blue-600 transition-colors">
+                By NeurekaLAB
+            </a>
+        </footer>
     </div>
 
     <script>
-        // --- DADES DE LES CURSES ---
-        // Quan tinguis el PDF o l'àlbum de fotos, enganxa l'enllaç entre les cometes ""
+        // --- DADES DE LES CURSES (LES TEVES DADES ACTUALITZADES) ---
         const curses = [
             { 
                 data: "23/05/2026", 
@@ -43,8 +53,8 @@
                 lloc: "La Garriga",
                 maps: "https://www.google.com/maps/search/?api=1&query=El+Passeig+La+Garriga",
                 web: "https://www.ciclisme.cat/cursa/carretera/xii-memorial-josep-segu-cadet",
-                pdf: "https://hipocamp.github.io/copacadet2026/instruccions_lagarriga.pdf", // Posa aquí l'enllaç al PDF
-                fotos: "https://drive.google.com/drive/folders/1EcFZvGEbFthirTpSByyLqJFvLpJw43GU?usp=drive_link" // Posa aquí l'enllaç de Google Fotos
+                pdf: "https://hipocamp.github.io/copacadet2026/instruccions_lagarriga.pdf",
+                fotos: "https://drive.google.com/drive/folders/1EcFZvGEbFthirTpSByyLqJFvLpJw43GU?usp=drive_link"
             },
             { 
                 data: "28/06/2026", 
@@ -52,8 +62,8 @@
                 lloc: "Montornès del Vallès",
                 maps: "https://www.google.com/maps/search/?api=1&query=Carrer+Federico+Garcia+Lorca+Montornès+del+Vallès",
                 web: "https://www.ciclisme.cat/cursa/carretera/trofeo-verbena-san-juan",
-                pdf: "", // Posa aquí l'enllaç al PDF
-                fotos: "" // Posa aquí l'enllaç de Google Fotos
+                pdf: "",
+                fotos: ""
             },
             { 
                 data: "19/07/2026", 
@@ -131,19 +141,38 @@
 
         const container = document.getElementById('llista-curses');
 
+        // Funció per saber si la cursa ja ha passat
+        function esCursaPassada(dataString) {
+            const [dia, mes, any] = dataString.split('/');
+            const dataCursa = new Date(any, mes - 1, dia);
+            const avui = new Date();
+            avui.setHours(0,0,0,0);
+            return dataCursa < avui;
+        }
+
         curses.forEach(cursa => {
-            const card = document.createElement('div');
-            card.className = "cursa-card bg-white rounded-3xl shadow-sm border border-slate-200 p-5";
+            const jaFeta = esCursaPassada(cursa.data);
             
-            // Lògica per desactivar botons si no hi ha link
+            // Lògica de colors i estats
+            const colorBorda = jaFeta ? "border-red-500 bg-red-50/20" : "border-green-500 bg-white";
+            const badge = jaFeta ? 
+                `<span class="bg-red-100 text-red-600 text-[8px] font-black px-2 py-0.5 rounded-full uppercase">Finalitzada</span>` : 
+                `<span class="bg-green-100 text-green-600 text-[8px] font-black px-2 py-0.5 rounded-full uppercase due-pulse">Propera</span>`;
+
+            const card = document.createElement('div');
+            card.className = `cursa-card rounded-3xl shadow-sm border-l-[12px] p-5 ${colorBorda} border border-slate-200`;
+            
             const pdfClass = cursa.pdf === "" ? "btn-disabled" : "";
             const fotosClass = cursa.fotos === "" ? "btn-disabled" : "";
 
             card.innerHTML = `
                 <div class="mb-4">
-                    <p class="text-red-600 font-black text-[10px] uppercase tracking-widest">${cursa.data}</p>
+                    <div class="flex justify-between items-start">
+                        <p class="text-slate-500 font-black text-[10px] uppercase tracking-widest">${cursa.data}</p>
+                        ${badge}
+                    </div>
                     <h2 class="text-xl font-bold text-slate-800 leading-tight mt-1">${cursa.nom}</h2>
-                    <p class="text-slate-400 text-xs font-bold mt-1">📍 ${cursa.lloc}</p>
+                    <p class="text-slate-400 text-xs font-bold mt-1 uppercase tracking-tight">📍 ${cursa.lloc}</p>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
@@ -177,4 +206,3 @@
     </script>
 </body>
 </html>
-
