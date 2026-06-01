@@ -2,124 +2,119 @@
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Copa Catalana Cadet 2026</title>    
-<link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/512/1A73E8/bicycle.png">
-<link rel="apple-touch-icon" href="https://img.icons8.com/ios-filled/512/1A73E8/bicycle.png">
-<meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Copa Catalana Cadet 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icona de la bicicleta blava -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/512/1A73E8/bicycle.png">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/ios-filled/512/1A73E8/bicycle.png">
+    <meta name="theme-color" content="#dc2626">
+
     <style>
-        .card { transition: transform 0.2s; }
-        .card:active { transform: scale(0.98); }
+        .cursa-card { transition: all 0.2s; }
+        .cursa-card:active { transform: scale(0.98); }
+        .btn-disabled { opacity: 0.3; grayscale: 1; pointer-events: none; }
     </style>
 </head>
-<body class="bg-slate-100 font-sans pb-10">
+<body class="bg-slate-100 pb-10 font-sans">
 
     <div class="max-w-md mx-auto">
         <!-- Capçalera -->
-        <header class="bg-blue-600 text-white p-6 shadow-lg text-center mb-6">
-            <h1 class="text-2xl font-bold italic tracking-wider text-white-300">COPA CATALANA CADET 2026</h1>
-            <p class="text-sm opacity-90">Calendari i Curses</p>
-            <p class="text-sm opacity-90">ProRide Jufré Cycling Team</p>
+        <header class="bg-red-600 text-white p-6 shadow-lg text-center mb-6 rounded-b-3xl">
+            <h1 class="text-2xl font-black italic tracking-wider text-yellow-300 uppercase leading-none">Copa Catalana 2026</h1>
+            <p class="text-[10px] font-bold opacity-90 uppercase tracking-[0.2em] mt-2">Àrea Tècnica Cadet</p>
         </header>
 
-        <div id="lista-carreras" class="px-4 space-y-4">
-            <!-- Les curses es generen aquí -->
+        <!-- Llista de Curses -->
+        <div id="llista-curses" class="px-4 space-y-5">
+            <!-- Es genera automàticament -->
         </div>
     </div>
 
     <script>
-        // Dades de les curses (Pots afegir-ne més aquí)
+        // --- DADES DE LES CURSES ---
+        // Quan tinguis el PDF o l'àlbum de fotos, enganxa l'enllaç entre les cometes ""
         const curses = [
             { 
                 data: "28/06/2026", 
                 nom: "Trofeu Verbena Sant Joan", 
                 lloc: "Montornès del Vallès",
-                maps: "https://www.google.com/maps/search/?api=1&query=Carrer+Federico+Garcia+Lorca+Montornès+del+Vallès+Ciclisme",
-                web: "https://www.ciclisme.cat/cursa/carretera/trofeo-verbena-san-juan"
+                maps: "https://www.google.com/maps/search/?api=1&query=Montornès+del+Vallès+Ciclisme",
+                web: "https://www.ciclisme.cat/cursa/carretera/trofeu-verbena-sant-joan",
+                pdf: "", // Posa aquí l'enllaç al PDF
+                fotos: "" // Posa aquí l'enllaç de Google Fotos
             },
             { 
                 data: "19/07/2026", 
                 nom: "II Trofeu Naut Aran", 
                 lloc: "Arties (Naut Aran)",
-                maps: "https://www.google.com/maps/search/?api=1&query=Aparcament+Baquèira+1500+Arties+Naut+Aran",
-                web: "https://www.ciclisme.cat/cursa/carretera/ii-trofeu-naut-aran-cadet"
-            },
-            { 
-                data: "02/08/2026", 
-                nom: "3a Edició Critèrium Ivan Graït - Cadet", 
-                lloc: "Ivars de Noguera",
-                maps: "https://www.google.com/maps/search/?api=1&query=Ivars+de+Noguera",
-                web: "https://www.ciclisme.cat/cursa/carretera/3a-edicio-criterium-ivan-grait-cadet"
+                maps: "https://www.google.com/maps/search/?api=1&query=Arties+Naut+Aran",
+                web: "https://www.ciclisme.cat/cursa/carretera/ii-trofeu-naut-aran",
+                pdf: "",
+                fotos: ""
             },
             { 
                 data: "15/08/2026", 
-                nom: "61è GRAN PREMI FESTA MAJOR MALGRAT DE MAR - CADET", 
+                nom: "GP Festa Major Malgrat", 
                 lloc: "Malgrat de Mar",
-                maps: "https://www.google.com/maps/search/?api=1&query=Pavelló+Poliesportiu+Malgrat+de+Mar",
-                web: "https://www.ciclisme.cat/cursa/carretera/61e-gran-premi-festa-major-malgrat-de-mar-cadet"
-            },
-            { 
-                data: "23/08/2026", 
-                nom: "V MEMORIAL PEDRO TIRADO", 
-                lloc: "Amposta",
-                maps: "https://www.google.com/maps/search/?api=1&query=Carrer+Brasail+Amposta",
-                web: "https://www.ciclisme.cat/cursa/carretera/v-memorial-pedro-tirado"
-            },
-            { 
-                data: "30/08/2026", 
-                nom: "49è Trofeu Quirze Martí", 
-                lloc: "Barcelona",
-                maps: "https://www.google.com/maps/search/?api=1&query=Carrer+Riego+2+Barcelona",
-                web: "https://www.ciclisme.cat/cursa/carretera/49e-trofeu-quirze-marti"
-            },
-            { 
-                data: "12/09/2026", 
-                nom: "VOLTA CICLISTA PACO GÁLVEZ-E1", 
-                lloc: "Vilafranca del Penedès",
-                maps: "https://www.google.com/maps/search/?api=1&query=Vilafranca+del+Penedès",
-                web: "https://www.ciclisme.cat/cursa/carretera/volta-ciclista-paco-galvez-e1-0"
-            },
-            { 
-                data: "13/09/2026", 
-                nom: "VOLTA CICLISTA PACO GÁLVEZ-E2", 
-                lloc: "Vilafranca del Penedès",
-                maps: "https://www.google.com/maps/search/?api=1&query=Vilafranca+del+Penedès",
-                web: "https://www.ciclisme.cat/cursa/carretera/volta-ciclista-paco-galvez-e2-0"
+                maps: "https://www.google.com/maps/search/?api=1&query=Pavelló+Malgrat+de+Mar",
+                web: "https://www.ciclisme.cat/cursa/carretera/gp-festa-major-malgrat-de-mar",
+                pdf: "",
+                fotos: ""
             },
             { 
                 data: "27/09/2026", 
                 nom: "GP Ajuntament de Sant Boi", 
                 lloc: "Sant Boi de Llobregat",
                 maps: "https://www.google.com/maps/search/?api=1&query=Sant+Boi+de+Llobregat+Ciclisme",
-                web: "https://www.ciclisme.cat/cursa/carretera/copa-catalana-cadet-gp-ajuntament-de-sant-boi-cadet"
+                web: "https://www.ciclisme.cat/cursa/carretera/gp-ajuntament-de-sant-boi",
+                pdf: "",
+                fotos: ""
             }
         ];
 
-        const container = document.getElementById('lista-carreras');
+        const container = document.getElementById('llista-curses');
 
         curses.forEach(cursa => {
             const card = document.createElement('div');
-            card.className = "card bg-white rounded-xl shadow-md overflow-hidden border-l-8 border-red-600";
+            card.className = "cursa-card bg-white rounded-3xl shadow-sm border border-slate-200 p-5";
+            
+            // Lògica per desactivar botons si no hi ha link
+            const pdfClass = cursa.pdf === "" ? "btn-disabled" : "";
+            const fotosClass = cursa.fotos === "" ? "btn-disabled" : "";
+
             card.innerHTML = `
-                <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-red-600 font-bold text-sm">${cursa.data}</p>
-                            <h2 class="text-lg font-bold text-slate-800">${cursa.nom}</h2>
-                            <p class="text-slate-500 text-sm flex items-center mt-1">
-                                📍 ${cursa.lloc}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 mt-4">
-                        <a href="${cursa.maps}" target="_blank" class="flex items-center justify-center bg-blue-500 text-white py-2 px-4 rounded-lg text-sm font-bold shadow-sm active:bg-blue-700">
-                            🗺️ MAPA (GPS)
-                        </a>
-                        <a href="${cursa.web}" target="_blank" class="flex items-center justify-center bg-emerald-500 text-white py-2 px-4 rounded-lg text-sm font-bold shadow-sm active:bg-emerald-700">
-                            ℹ️ MÉS INFO
-                        </a>
-                    </div>
+                <div class="mb-4">
+                    <p class="text-red-600 font-black text-[10px] uppercase tracking-widest">${cursa.data}</p>
+                    <h2 class="text-xl font-bold text-slate-800 leading-tight mt-1">${cursa.nom}</h2>
+                    <p class="text-slate-400 text-xs font-bold mt-1">📍 ${cursa.lloc}</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <!-- BOTÓ MAPS -->
+                    <a href="${cursa.maps}" target="_blank" class="flex flex-col items-center justify-center bg-blue-500 text-white py-3 rounded-2xl shadow-lg shadow-blue-100">
+                        <span class="text-lg">📍</span>
+                        <span class="text-[9px] font-black uppercase mt-1 tracking-tighter">Com anar-hi</span>
+                    </a>
+                    
+                    <!-- BOTÓ INFO WEB -->
+                    <a href="${cursa.web}" target="_blank" class="flex flex-col items-center justify-center bg-slate-800 text-white py-3 rounded-2xl shadow-lg shadow-slate-200">
+                        <span class="text-lg">🌐</span>
+                        <span class="text-[9px] font-black uppercase mt-1 tracking-tighter">Inscripció</span>
+                    </a>
+
+                    <!-- BOTÓ PDF (Instruccions) -->
+                    <a href="${cursa.pdf}" target="_blank" class="${pdfClass} flex flex-col items-center justify-center bg-orange-500 text-white py-3 rounded-2xl shadow-lg shadow-orange-100">
+                        <span class="text-lg">📄</span>
+                        <span class="text-[9px] font-black uppercase mt-1 tracking-tighter">Instruccions</span>
+                    </a>
+
+                    <!-- BOTÓ FOTOS -->
+                    <a href="${cursa.fotos}" target="_blank" class="${fotosClass} flex flex-col items-center justify-center bg-emerald-500 text-white py-3 rounded-2xl shadow-lg shadow-emerald-100">
+                        <span class="text-lg">📸</span>
+                        <span class="text-[9px] font-black uppercase mt-1 tracking-tighter">Fotos Cursa</span>
+                    </a>
                 </div>
             `;
             container.appendChild(card);
